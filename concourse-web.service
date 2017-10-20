@@ -1,0 +1,24 @@
+[Unit]
+Description=Concourse
+After=network-onlnte.target
+
+[Service]
+EnvironmentFile=/etc/concourse/concourse.conf
+User=concourse
+PrivateDevices=yes
+PrivateTmp=yes
+ProtectSystem=full
+ProtectHome=read-only
+SecureBits=keep-caps
+Capabilities=CAP_IPC_LOCK+ep
+CapabilityBoundingSet=CAP_SYSLOG CAP_IPC_LOCK
+NoNewPrivileges=yes
+ExecStart=/usr/bin/concourse web
+KillSignal=SIGTERM
+TimeoutStopSec=30s
+Restart=on-failure
+StartLimitInterval=60s
+StartLimitBurst=3
+
+[Install]
+WantedBy=multi-user.target

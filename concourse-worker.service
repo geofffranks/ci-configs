@@ -1,0 +1,24 @@
+[Unit]
+Description=Concourse
+After=concourse-web.service
+
+[Service]
+EnvironmentFile=/etc/concourse/concourse.conf
+PrivateTmp=yes
+PrivateDevices=false
+ProtectSystem=full
+ProtectHome=read-only
+SecureBits=keep-caps
+NoNewPrivileges=yes
+ExecStart=/bin/bash -c "/usr/bin/concourse worker --name $(uuidgen)"
+KillSignal=SIGTERM
+TimeoutStopSec=30s
+Restart=on-failure
+StartLimitInterval=60s
+StartLimitBurst=3
+LimitNPROC=infinity
+LimitNOFILE=infinity
+TasksMax=infinity
+
+[Install]
+WantedBy=multi-user.target
