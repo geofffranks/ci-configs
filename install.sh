@@ -40,6 +40,12 @@ sudo chown vault /opt/vault
 sudo mkdir -p /opt/concourse
 sudo chown concourse /opt/concourse
 
+echo -e "${COL_CYAN}** Configuring iptables$COL_RESET"
+sudo cp iptables.rules /etc/iptables.rules
+sudo iptables-restore < /etc/iptables.rules
+if ! grep iptables-restore /etc/iptables.rules >/dev/null 2>&1; then
+  sudo bash -c 'echo "iptables-restore < /etc/iptables.rules" > /etc/rc.local'
+fi
 
 echo -e "${COL_CYAN}** Configuring Systemd$COL_RESET"
 sudo mkdir -p /usr/lib/systemd/system
@@ -75,5 +81,9 @@ fi
 sudo chown -R concourse:concourse /etc/concourse
 sudo chmod -R 600 /etc/concourse
 sudo chmod 700 /etc/concourse
+
+echo -e "${COL_CYAN}** Configuring Vault$COL_RESET"
+sudo cp vault.conf /etc/vault.conf
+
 
 echo -e "${COL_GREEN}** System configured. Don't forget to restart services appropriately$COL_RESET"
