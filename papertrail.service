@@ -4,7 +4,7 @@ After=systemd-journald.service
 Requires=systemd-journald.service
 
 [Service]
-ExecStart=/bin/sh -c "journalctl -f | ncat --ssl logs6.papertrailapp.com 32577"
+ExecStart=/bin/sh -c "journalctl -f | ncat --ssl FIXME.papertrailapp.com FIXME"
 TimeoutStopSec=30s
 Restart=on-failure
 RestartSec=5s
