@@ -43,8 +43,13 @@ sudo chown concourse /opt/concourse
 echo -e "${COL_CYAN}** Configuring iptables$COL_RESET"
 sudo cp iptables.rules /etc/iptables.rules
 sudo iptables-restore < /etc/iptables.rules
-if ! grep iptables-restore /etc/iptables.rules >/dev/null 2>&1; then
-  sudo bash -c 'echo "iptables-restore < /etc/iptables.rules" > /etc/rc.local'
+sudo chmod 755 /etc/rc.local
+if [[ ! -f /etc/rc.local ]]; then
+  sudo bash -c 'echo -e "#!/bin/bash\niptables-restore < /etc/iptables.rules" > /etc/rc.local'
+else
+  if ! grep iptables-restore /etc/rc.local >/dev/null 2>&1; then
+    sudo bash -c 'echo "iptables-restore < /etc/iptables.rules" >> /etc/rc.local'
+  fi
 fi
 
 echo -e "${COL_CYAN}** Configuring Systemd$COL_RESET"

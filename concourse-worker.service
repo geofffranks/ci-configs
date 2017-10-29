@@ -1,6 +1,6 @@
 [Unit]
 Description=Concourse
-After=concourse-web.service
+After=concourse-web.service rc-local.service
 
 [Service]
 EnvironmentFile=/etc/concourse/concourse.conf
