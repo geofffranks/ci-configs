@@ -11,6 +11,8 @@ COL_BLUE=$ESC_SEQ"34;01m"
 COL_MAGENTA=$ESC_SEQ"35;01m"
 COL_CYAN=$ESC_SEQ"36;01m"
 
+CONCOURSE_VERSION=5.4.1
+
 echo -e "${COL_CYAN}** Setting up APT info$COL_RESET"
 if [[ ! -f /etc/apt/sources.list.d/starkandwayne.list ]]; then
   sudo apt-get update
@@ -21,12 +23,15 @@ fi
 
 echo -e "${COL_CYAN}** Installing packages$COL_RESET"
 sudo apt-get update
-sudo apt-get install postgresql-9.5 concourse vault spruce safe jq nmap
+sudo apt-get install postgresql-9.5 vault spruce safe jq nmap xfsprogs
 
 echo -e "${COL_CYAN}** Adding Vault user$COL_RESET"
 if ! id vault >/dev/null 2>&1; then
   sudo useradd --system --shell /bin/nologin vault
 fi
+
+wget https://github.com/concourse/concourse/releases/download/v${CONCOURSE_VERSION}/concourse-${CONCOURSE_VERSION}-linux-amd64.tgz
+tar -xzf concourse-${CONCOURSE_VERSION}-linux-amd64.tgz -C /usr/local
 
 echo -e "${COL_CYAN}** Adding Concourse user$COL_RESET"
 if ! id concourse > /dev/null 2>&1; then
@@ -89,6 +94,5 @@ sudo chmod 700 /etc/concourse
 
 echo -e "${COL_CYAN}** Configuring Vault$COL_RESET"
 sudo cp vault.conf /etc/vault.conf
-
 
 echo -e "${COL_GREEN}** System configured. Don't forget to restart services appropriately$COL_RESET"
