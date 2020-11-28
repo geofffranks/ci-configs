@@ -1,0 +1,10 @@
+---
+roles:
+- name: owner
+  github:
+   users:
+   - geofffranks
+- name: member
+  github:
+    teams:
+    - cloudfoundry-incubator/haproxy-boshrelease
